@@ -4,8 +4,17 @@ const express = require("express");
 const app = express();
 const routes = require("./routes");
 const path = require("path");
-
 const mongoose = require("mongoose");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const flash = require("connect-flash");
+const helmet = require("helmet");
+const csrf = require("csurf");
+const {
+  checkCsrError,
+  csrfMiddleware,
+} = require("./src/middlewares/middleware");
+
 mongoose
   .connect(process.env.CONNECT_STRING, {
     useNewUrlParser: true,
@@ -19,6 +28,26 @@ app.use(express.static(path.resolve(__dirname, "public")));
 
 app.set("views", path.resolve(__dirname, "src", "views"));
 app.set("view engine", "ejs");
+
+app.use(helmet());
+app.use(express.json());
+app.use(flash());
+app.use(csrf());
+app.use(checkCsrError);
+app.use(csrfMiddleware);
+
+const sessionOptions = session({
+  secret: "asfjdncjdkdkjcndnvidodn ddoododododidid a90()",
+  store: MongoStore.create({ mongoUrl: process.env.CONNECT_STRING }),
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    httpOnly: true,
+  },
+});
+
+app.use(sessionOptions);
 
 app.use(routes);
 
