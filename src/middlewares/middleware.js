@@ -1,5 +1,7 @@
 exports.checkCsrError = (err, req, res, next) => {
-  if (err && "EBADCSRFTOKEN" === err.code) return res.render("404");
+  if (err) {
+    return res.render("404");
+  }
   next();
 };
 
