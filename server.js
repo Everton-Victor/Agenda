@@ -16,6 +16,19 @@ const {
   csrfMiddleware,
 } = require("./src/middlewares/middleware");
 
+const sessionOptions = session({
+  secret: "asfjdncjdkdkjcndnvidodn ddoododododidid a90()",
+  store: MongoStore.create({ mongoUrl: process.env.CONNECT_STRING }),
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    httpOnly: true,
+  },
+});
+
+app.use(sessionOptions);
+
 mongoose
   .connect(process.env.CONNECT_STRING, {
     useNewUrlParser: true,
@@ -36,19 +49,6 @@ app.use(flash());
 app.use(csrf());
 app.use(checkCsrError);
 app.use(csrfMiddleware);
-
-const sessionOptions = session({
-  secret: "asfjdncjdkdkjcndnvidodn ddoododododidid a90()",
-  store: MongoStore.create({ mongoUrl: process.env.CONNECT_STRING }),
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-    httpOnly: true,
-  },
-});
-
-app.use(sessionOptions);
 
 app.use(routes);
 
