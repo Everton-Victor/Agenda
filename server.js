@@ -14,6 +14,7 @@ const csrf = require("csurf");
 const {
   checkCsrError,
   csrfMiddleware,
+  flashMiddleware,
 } = require("./src/middlewares/middleware");
 
 const sessionOptions = session({
@@ -49,6 +50,7 @@ app.use(flash());
 app.use(csrf());
 app.use(checkCsrError);
 app.use(csrfMiddleware);
+app.use(flashMiddleware);
 
 app.use(routes);
 
