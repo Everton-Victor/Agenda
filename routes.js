@@ -12,4 +12,10 @@ routes.get("/login/index", loginController.index);
 // Rota Action Form Register (Cadastro)
 routes.post("/login/register", loginController.register);
 
+// Rota Action Form Login (Entrar)
+routes.post("/login/login", loginController.login);
+
+// Rota Nav  (Sair)
+routes.get("/login/logout", loginController.logout);
+
 module.exports = routes;
